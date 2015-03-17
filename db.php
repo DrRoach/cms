@@ -1,7 +1,5 @@
 <?php
 
-namespace cms;
-
 class db
 {
     public static $con;

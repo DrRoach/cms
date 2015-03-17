@@ -12,8 +12,8 @@
     }
 
     require_once 'db.php';
+    db::con();
 ?>
-<?php db::con(); ?>
 
 <html>
 <head>

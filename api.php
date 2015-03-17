@@ -1,7 +1,5 @@
 <?php
 
-namespace cms;
-
 class Api
 {
     public static function test()
