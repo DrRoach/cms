@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+}
+
+#imageOverlay {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    z-index: -1;
+}
+
+#loginImage {
+    position: absolute;
+    z-index: -2;
+    background: url("../images/login.jpg");
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+}
+
+#loginForm {
+    margin-top: 10%;
+    color: whitesmoke;
+    text-align: center;
+}
+
+#loginForm h1 {
+    font-family: "Arvo";
+}
+
+.alert {
+    margin-top: 1%;
+    text-align: center;
+}
+
+.marginButton {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+textarea {
+    resize: vertical;
+}
