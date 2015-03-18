@@ -8,6 +8,9 @@ The default login for the admin system is `username`:`admin`, `password`:`passwo
 ####config.php
 At the moment, the only bit of setup that must be done is setting you `URI`. By default, this is set to `/cms` and needs more testing before it can be reliably changed.
 
+####Database
+The MySQL DB dump is saved in sql/cms.sql and this is your starting databse. Imprvements are going to be made in the future to make the database management better and easier.
+
 ####Api Calls
 
 There are a few API calls available to you on your frontend site. There is however, one requirement to use them however, which is to `require` the `api.php` file in the file you wish to use them.
