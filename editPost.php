@@ -56,6 +56,14 @@ if(isset($_POST['submit'])) {
             </div>
 
             <div class="form-group">
+                <label for="postType">Post Type</label>
+                <select name="type" class="form-control">
+                    <option value="text" <?=($post['type'] == 'text' ? 'selected' : '')?>>Text</option>
+                    <option value="image" <?=($post['type'] == 'image' ? 'selected' : '')?>>Image</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="postPost">Post Content</label>
                 <textarea id="textarea" class="form-control" name="content"><?=(!empty($post['post']) ? $post['post'] : '')?></textarea>
             </div>

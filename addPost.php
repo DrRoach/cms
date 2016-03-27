@@ -3,7 +3,7 @@
 <?php
     if(isset($_POST['submit'])) {
         try {
-            if (empty($_POST['title']) || empty($_POST['content']) || empty($_POST['slug'])) {
+            if (empty($_POST['title']) || empty($_POST['content']) || empty($_POST['slug']) || empty($_POST['type']) ) {
                 throw new Exception('Please make sure that you fill all fields', 400);
             }
             //Check to see if a post with that name exists
@@ -20,7 +20,7 @@
                 throw new Exception("A post with that slug already exists", 400);
             }
             //Everything has passed, add it
-            mysqli_query(db::$con, "INSERT INTO posts (title, post, slug, posted_by, date) VALUES ('".addslashes($_POST['title'])."', '".addslashes($_POST['content'])."', '".addslashes($_POST['slug'])."', '".addslashes($_SESSION['username'])."', '".date('Y-m-d H:i:s')."')");
+            mysqli_query(db::$con, "INSERT INTO posts (title, type, post, slug, posted_by, date) VALUES ('".addslashes($_POST['title'])."', '".addslashes($_POST['type'])."', '".addslashes($_POST['content'])."', '".addslashes($_POST['slug'])."', '".addslashes($_SESSION['username'])."', '".date('Y-m-d H:i:s')."')");
             header('Location: posts.php');
             exit;
         } catch (Exception $e) {
@@ -41,6 +41,14 @@
         <div class="form-group">
             <label for="postTitle">Post Title</label>
             <input type="text" class="form-control" id="postTitle" placeholder="Post Title" name="title" value="<?=(!empty($_POST['title']) ? $_POST['title'] : '')?>">
+        </div>
+
+        <div class="form-group">
+            <label for="postType">Post Type</label>
+            <select name="type" class="form-control">
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+            </select>
         </div>
 
         <div class="form-group">
