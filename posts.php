@@ -40,7 +40,7 @@ $posts = mysqli_query(db::$con, 'SELECT * FROM posts ORDER BY id DESC');
                 <td><?=$row['posted_by'];?></td>
                 <td><?=$row['date'];?></td>
                 <td><a href="editPost.php?id=<?=$row['id']?>"><button class="btn btn-info col-xs-12 "><i class="fa fa-pencil-square-o"></i> Edit</button></a></td>
-                <td><a href="index.php?deleteUser=true&id=<?=$row['id']?>"><button class="btn btn-danger col-xs-12 "><i class="fa fa-times"></i> Delete</button></a></td>
+                <td><a href="index.php?deletePost=true&id=<?=$row['id']?>"><button class="btn btn-danger col-xs-12 "><i class="fa fa-times"></i> Delete</button></a></td>
             </tr>
         <?php endwhile; ?>
         </tbody>
