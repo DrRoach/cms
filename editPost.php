@@ -11,7 +11,7 @@ if(empty($post['id'])) {
 
 if(isset($_POST['submit'])) {
     try {
-        if (empty($_POST['title']) || empty($_POST['content']) || empty($_POST['slug'])) {
+        if (empty($_POST['title']) || (empty($_POST['content']) && empty($_FILES['fileUpload']['name'])) || empty($_POST['slug'])) {
             throw new Exception('Please make sure that you fill all fields', 400);
         }
         //Check to make sure that the post title doesn't already exist
@@ -31,8 +31,29 @@ if(isset($_POST['submit'])) {
             }
         }
 
+        if (!empty($_FILES['fileUpload']['name'])) {
+            $targetDir = __DIR__ . "/images/uploads/";
+            $targetDest = $targetDir . basename($_FILES['fileUpload']['name']);
+            $imageFileType = pathinfo($targetDest ,PATHINFO_EXTENSION);
+            $imagePath = basename(getcwd()) . "/images/uploads/" . htmlentities($_FILES['fileUpload']['name']);
+
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                throw new Exception('Sorry, you can only upload jpg, jpeg or png files');
+            }
+
+            if (!move_uploaded_file($_FILES['fileUpload']['tmp_name'], $targetDest)) {
+                throw new Exception('Sorry, there was an error when trying to upload your file.');
+            } else {
+                $content = '/' . $imagePath;
+            }
+        }
+
+        if (!isset($content)) {
+            $content = addslashes($_POST['content']);
+        }
+
         //Update the post
-        mysqli_query(db::$con, "UPDATE posts SET title='".addslashes($_POST['title'])."', post='".addslashes($_POST['content'])."', slug='".addslashes($_POST['slug'])."' WHERE id='".addslashes($id)."'");
+        mysqli_query(db::$con, "UPDATE posts SET title='".addslashes($_POST['title'])."', post='".$content."', slug='".addslashes($_POST['slug'])."', type='".addslashes($_POST['type'])."' WHERE id='".addslashes($id)."'");
         header('Location: posts.php');
         exit;
     } catch (Exception $e) {
@@ -49,7 +70,7 @@ if(isset($_POST['submit'])) {
             <div class="alert alert-danger col-sm-offset-4 col-xs-12 col-sm-4" role="alert"><?=$message?></div>
         <?php endif; ?>
 
-        <form action="" method="post" class="col-sm-offset-4 col-xs-12 col-sm-4">
+        <form action="" method="post" class="col-sm-offset-4 col-xs-12 col-sm-4" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="postTitle">Post Title</label>
                 <input type="text" class="form-control" id="postTitle" placeholder="Post Title" name="title" value="<?=(!empty($post['title']) ? $post['title'] : '')?>">
@@ -65,7 +86,12 @@ if(isset($_POST['submit'])) {
 
             <div class="form-group">
                 <label for="postPost">Post Content</label>
-                <textarea id="textarea" class="form-control" name="content"><?=(!empty($post['post']) ? $post['post'] : '')?></textarea>
+                    <div id="imageContent">
+                        <input type="file" id="fileUpload" name="fileUpload">
+                        <p class="help-block">Select a file to upload.</p>
+                    </div>
+
+                    <textarea id="textContent" class="form-control" name="content"><?=(!empty($post['post']) ? $post['post'] : '')?></textarea>
             </div>
 
             <div class="form-group">

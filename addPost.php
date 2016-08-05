@@ -3,7 +3,7 @@
 <?php
     if(isset($_POST['submit'])) {
         try {
-            if (empty($_POST['title']) || empty($_POST['content']) || empty($_POST['slug']) || empty($_POST['type']) ) {
+            if (empty($_POST['title']) || (empty($_POST['content']) && empty($_FILES['fileUpload'])) || empty($_POST['slug']) || empty($_POST['type']) ) {
                 throw new Exception('Please make sure that you fill all fields', 400);
             }
             //Check to see if a post with that name exists
@@ -19,8 +19,35 @@
             while($row = mysqli_fetch_assoc($slugCheck)) {
                 throw new Exception("A post with that slug already exists", 400);
             }
+
+            /**
+             * Upload image if one has been set.
+             * TODO:
+             * Make this and the editPost file upload into one function. No need to have the same code twice.
+             */
+            if (!empty($_FILES['fileUpload']['name'])) {
+                $targetDir = __DIR__ . "/images/uploads/";
+                $targetDest = $targetDir . basename($_FILES['fileUpload']['name']);
+                $imageFileType = pathinfo($targetDest ,PATHINFO_EXTENSION);
+                $imagePath = basename(getcwd()) . "/images/uploads/" . htmlentities($_FILES['fileUpload']['name']);
+
+                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                    throw new Exception('Sorry, you can only upload jpg, jpeg or png files');
+                }
+
+                if (!move_uploaded_file($_FILES['fileUpload']['tmp_name'], $targetDest)) {
+                    throw new Exception('Sorry, there was an error when trying to upload your file.');
+                } else {
+                    $content = '/' . $imagePath;
+                }
+            }
+
+            if (!isset($content)) {
+                $content = addslashes($_POST['content']);
+            }
+
             //Everything has passed, add it
-            mysqli_query(db::$con, "INSERT INTO posts (title, type, post, slug, posted_by, date) VALUES ('".addslashes($_POST['title'])."', '".addslashes($_POST['type'])."', '".addslashes($_POST['content'])."', '".addslashes($_POST['slug'])."', '".addslashes($_SESSION['username'])."', '".date('Y-m-d H:i:s')."')");
+            mysqli_query(db::$con, "INSERT INTO posts (title, type, post, slug, posted_by, date) VALUES ('".addslashes($_POST['title'])."', '".addslashes($_POST['type'])."', '".$content."', '".addslashes($_POST['slug'])."', '".addslashes($_SESSION['username'])."', '".date('Y-m-d H:i:s')."')");
             header('Location: posts.php');
             exit;
         } catch (Exception $e) {
@@ -37,7 +64,7 @@
     <div class="alert alert-danger col-sm-offset-4 col-xs-12 col-sm-4" role="alert"><?=$message?></div>
     <?php endif; ?>
 
-    <form action="" method="post" class="col-sm-offset-4 col-xs-12 col-sm-4">
+    <form action="" method="post" class="col-sm-offset-4 col-xs-12 col-sm-4" enctype="multipart/form-data">
         <div class="form-group">
             <label for="postTitle">Post Title</label>
             <input type="text" class="form-control" id="postTitle" placeholder="Post Title" name="title" value="<?=(!empty($_POST['title']) ? $_POST['title'] : '')?>">
@@ -53,7 +80,13 @@
 
         <div class="form-group">
             <label for="postPost">Post Content</label>
-            <textarea id="textarea" class="form-control" name="content"><?=(!empty($_POST['content']) ? $_POST['content'] : '')?></textarea>
+
+            <div id="imageContent">
+                <input type="file" id="fileUpload" name="fileUpload">
+                <p class="help-block">Select a file to upload.</p>
+            </div>
+
+            <textarea id="textContent" class="form-control" name="content"><?=(!empty($_POST['content']) ? $_POST['content'] : '')?></textarea>
         </div>
 
         <div class="form-group">
