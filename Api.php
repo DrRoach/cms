@@ -7,13 +7,20 @@ class Api
         echo 'Connected to cms Api';
     }
 
-    public static function getPosts()
+    public static function getPosts($params = [])
     {
         require_once 'db.php';
         is_null(db::$con) ? db::con() : null;
 
+        //Generate the WHERE SQL code
+        if (!empty($params)) {
+            $where = self::generateWhere($params);
+        } else {
+            $where = '';
+        }
+
         //Get all of the posts
-        $posts = mysqli_query(db::$con, "SELECT * FROM posts");
+        $posts = mysqli_query(db::$con, "SELECT * FROM posts " . $where);
         //Turn posts into a array
         $return = [];
         while($row = mysqli_fetch_assoc($posts)) {
