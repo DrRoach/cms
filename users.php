@@ -5,9 +5,9 @@
 ?>
 
 <div class="col-xs-12">
-    <a href="posts.php"><button class="col-sm-2 col-xs-12 btn btn-info marginButton"><i class="fa fa-caret-square-o-left"></i> Back to Posts</button></a>
+    <a href="addUser.php"><button class="col-sm-2 col-xs-12 btn btn-success marginButton"><i class="fa fa-plus"></i> Add User</button></a>
 
-    <a href="addUser.php"><button class="col-sm-2 col-xs-12 col-sm-offset-6 btn btn-success marginButton"><i class="fa fa-plus"></i> Add User</button></a>
+    <a href="posts.php"><button class="col-sm-2 col-xs-12 col-sm-offset-6 btn btn-info marginButton"><i class="fa fa-caret-square-o-left"></i> Back to Posts</button></a>
     <a href="index.php?logout=true"><button class="col-xs-12 col-sm-2 btn btn-danger marginButton"><i class="fa fa-sign-out"></i> Logout</button></a>
 
     <?php if(!empty($_SESSION['error'])) : ?>
