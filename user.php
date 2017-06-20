@@ -14,7 +14,11 @@ class user
 
     public static function loggedIn()
     {
-
+        if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function logout()

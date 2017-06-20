@@ -8,7 +8,11 @@ if(session_status() == PHP_SESSION_NONE) {
 
 $url = $_SERVER['REQUEST_URI'];
 
-if((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && $url . '/login.php' != 'login.php') {
+//Require user file to have access to user methods
+require_once 'user.php';
+
+//If user isn't logged in and isn't on `login.php` redirect them
+if(user::loggedIn() == false && $url . '/login.php' != 'login.php') {
     header('Location: login.php');
     exit;
 }
