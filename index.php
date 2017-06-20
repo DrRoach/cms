@@ -1,10 +1,14 @@
 <?php
 
+require_once 'config.php';
+
 if(session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$url = explode('/', $_SERVER['REQUEST_URI']);
-if((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && $url[sizeof($url)-1] != 'login.php') {
+
+$url = $_SERVER['REQUEST_URI'];
+
+if((!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) && $url . '/login.php' != 'login.php') {
     header('Location: login.php');
     exit;
 }
