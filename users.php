@@ -17,22 +17,24 @@
         endif;
     ?>
 
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Remove</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php while($row = mysqli_fetch_assoc($users)) : ?>
-            <tr>
-                <td><?=$row['id'];?></td>
-                <td><?=$row['username'];?></td>
-                <td><a href="index.php?deleteUser=true&id=<?=$row['id']?>"><button class="btn btn-danger col-xs-12 "><i class="fa fa-times"></i> Delete</button></a></td>
-            </tr>
-        <?php endwhile; ?>
-        </tbody>
-    </table>
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php while($row = mysqli_fetch_assoc($users)) : ?>
+                <tr>
+                    <td><?=$row['id'];?></td>
+                    <td><?=$row['username'];?></td>
+                    <td><a href="index.php?deleteUser=true&id=<?=$row['id']?>"><button class="btn btn-danger col-xs-12 "><i class="fa fa-times"></i> Delete</button></a></td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
