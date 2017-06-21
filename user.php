@@ -21,6 +21,14 @@ class user
         }
     }
 
+    public static function getUsername() {
+        if (self::loggedIn() && isset($_SESSION['username'])) {
+            return $_SESSION['username'];
+        } else {
+            return false;
+        }
+    }
+
     public static function logout()
     {
         unset($_SESSION['loggedIn']);
